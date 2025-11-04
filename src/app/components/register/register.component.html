@@ -1,0 +1,94 @@
+<div *ngIf="!tipoSeleccionado" class="selector-container">
+  <button type="button" class="tipo-btn" (click)="seleccionarTipo('paciente')">
+    <img src="assets/paciente.png" alt="Paciente" [@tipoSeleccionado]="animacionTipo  === 'izquierda' ? 'izquierda' : 'visible'"/>
+    <span>Paciente</span>
+  </button>
+  <button type="button" class="tipo-btn" (click)="seleccionarTipo('especialista')">
+    <img src="assets/especialista.png" alt="Especialista" [@tipoSeleccionado]="animacionTipo  === 'derecha' ? 'derecha' : 'visible'"/>
+    <span>Especialista</span>
+  </button>
+</div>
+
+<div *ngIf="tipoSeleccionado" class="registro-container">
+  <h2>Registro de Usuario</h2>
+
+  <form (ngSubmit)="registrar()" #form="ngForm">
+    <div class="form-row">
+      <label>Nombre:</label>
+      <input type="text" [(ngModel)]="usuario.nombre" name="nombre" required />
+    </div>
+
+    <div class="form-row">
+      <label>Apellido:</label>
+      <input type="text" [(ngModel)]="usuario.apellido" name="apellido" required />
+    </div>
+
+    <div class="form-row">
+      <label>Edad:</label>
+      <input type="number" [(ngModel)]="usuario.edad" name="edad" required min="1" max="120" />
+    </div>
+
+    <div class="form-row">
+      <label>DNI:</label>
+      <input type="text" [(ngModel)]="usuario.dni" name="dni" required />
+    </div>
+
+    <div class="form-row">
+      <label>Tipo de usuario:</label>
+      <input type="text" [value]="usuario.categoria" disabled> 
+    </div>    
+
+    <div class="form-row">
+      <label>Correo electrónico:</label>
+      <input type="email" [(ngModel)]="usuario.email" name="email" required />
+    </div>
+
+    <div class="form-row">
+      <label>Contraseña:</label>
+      <input type="password" [(ngModel)]="password" name="password" required />
+    </div>
+
+    <div class="form-row">
+      <label>Obra Social:</label>
+      <input type="text" [(ngModel)]="usuario.obra_social" name="obraSocial" />
+    </div>
+
+    <div class="form-row especialidad-input-group" *ngIf="usuario.categoria === 'especialista'"> 
+      <label>Especialidades:</label>
+      <input list="especialidades" [(ngModel)]="especialidadSeleccionada" name="especialidadSeleccionada" placeholder="Seleccioná o agrega una especialidad" />
+      <datalist id="especialidades">
+        <option *ngFor="let esp of especialidadesDisponibles" [value]="esp.nombre"></option>
+      </datalist>
+      <button type="button" (click)="agregarEspecialidad()">Agregar</button>
+
+      <div class="especialidades-lista">
+        <span *ngFor="let esp of especialidadesSeleccionadas" class="chip">
+          {{ esp }}
+          <button type="button" (click)="eliminarEspecialidad(esp)">x</button>
+        </span>
+      </div>
+    </div>
+
+
+    <div class="form-row">
+      <label>Imagen 1:</label>
+      <input type="file" (change)="onFileSelected($event)" required />
+    </div>
+
+    <div class="form-row" *ngIf="usuario.categoria === 'paciente'">
+      <label>Imagen 2:</label>
+      <input type="file" (change)="onFileSelected2($event)" required />
+    </div>
+
+    <div id="captcha" class="g-recaptcha" data-sitekey="6LeeBGgrAAAAAJ3-Ql_0OZVwhaf4U1Y2uCKvu_uQ"></div>
+
+    <div class="form-error" *ngIf="errorMsg">{{ errorMsg }}</div>
+    
+    <button type="submit">Registrarse</button>
+  </form>
+
+  <div class="login-link-container">
+    <span>¿Ya tienes cuenta? </span>
+    <a routerLink="/login" class="login-link">Inicia sesión</a>
+  </div>
+</div>

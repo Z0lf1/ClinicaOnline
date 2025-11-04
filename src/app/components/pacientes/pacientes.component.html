@@ -1,0 +1,28 @@
+<div class="pacientes-container">
+  <h2>Pacientes Atendidos</h2>
+
+  <div class="paciente-item" *ngFor="let paciente of PacientesAtendidos">
+    <!-- Imagen dentro del fav-button redondo -->
+    <button class="fav-button" 
+      [routerLink]="['/home/pacientes/historias-clinicas']"
+      [queryParams]="{ pacienteId: paciente.id }"  
+    >
+      <img 
+        [src]="getAvatarUrl(paciente.url_img1)" 
+        alt="{{ paciente.nombre }}" 
+      />
+    </button>
+
+    <div class="info">
+      <div class="nombre">
+        {{ paciente.nombre }} {{ paciente.apellido }}
+      </div>
+    </div>
+  </div>
+
+
+
+  <div *ngIf="PacientesAtendidos.length === 0" class="no-pacientes">
+    <p>Aún no atendiste a ningún paciente.</p>
+  </div>
+</div>

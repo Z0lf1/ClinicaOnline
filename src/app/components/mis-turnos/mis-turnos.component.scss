@@ -1,0 +1,210 @@
+.mis-turnos-container {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px 30px;
+  background-color: #24b34ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+  }
+
+  .filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+    margin-bottom: 30px;
+
+    .filtros-arriba {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      justify-content: center;
+      flex: 1 1 auto;
+    }
+
+    
+    .filtro-historiaClinica-container {
+      width: 100%;
+      display: flex;
+      justify-content: flex-start; 
+      margin-top: 10px; 
+    }
+
+    .filtro-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      min-width: 20px;
+
+      label {
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #2c3e50;
+      }
+
+      input[type="text"] {
+        width: 40%;
+        padding: 8px 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 12px;
+        transition: border-color 0.3s ease;
+
+        &:focus {
+          border-color: #3498db;
+          outline: none;
+        }
+      }
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    thead {
+      background-color: #00ffff;
+      color: #2a0ac9;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tbody tr:hover {
+      background-color: #eef6fb;
+    }
+  }
+
+  button {
+    margin-top: 4px;
+    margin-right: 4px;
+    padding: 5px 10px;
+    background-color: #00ffff;
+    color: #2a0ac9;
+    border: none;
+    border-radius: 5px;
+    font-size: 13px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #2980b9;
+    }
+  }
+
+  .input-comentario {
+    width: 100%;
+    min-height: 60px;
+    max-width: 400px;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: inherit;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    resize: vertical;
+    margin: 6px 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+    &:focus {
+      outline: none;
+      border-color: #3498db;
+    }
+  }
+
+  .reseña-visible {
+    background-color: #f0f7fd;
+    border-left: 4px solid #3498db;
+    padding: 10px 14px;
+    margin: 10px 0;
+    border-radius: 6px;
+    color: #2c3e50;
+    font-size: 14px;
+    max-width: 500px;
+  }
+
+  .error-msg {
+    color: #c0392b;
+    font-size: 13px;
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  .calificacion-container,
+  .encuesta-container {
+    margin-top: 10px;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    max-width: 500px;
+
+    p {
+      margin-bottom: 6px;
+    }
+  }
+
+  .puntaje {
+    display: flex;
+    gap: 12px; 
+    margin: 8px 0;
+
+    
+    .punto-container {
+      display: flex;
+      flex-direction: column; 
+      align-items: center; 
+      cursor: pointer;
+
+      .punto {
+        font-size: 22px;
+        color: #bbb;
+        transition: color 0.3s, transform 0.2s;
+      }
+
+      .numero {
+        font-size: 12px; 
+        color: #666;
+        margin-top: 2px;
+        user-select: none; 
+      }
+
+      &.seleccionado {
+        .punto {
+          color: #3498db;
+          transform: scale(1.4);
+          text-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .numero {
+          color: #2980b9;
+          font-weight: bold;
+        }
+      }
+
+      &:hover {
+        .punto {
+          color: #2980b9;
+          transform: scale(1.2);
+        }
+      }
+    }
+  }
+
+  .no-turnos {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+    margin-top: 20px;
+  }
+}

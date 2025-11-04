@@ -1,0 +1,73 @@
+<div class="perfil-container" *ngIf="usuario">
+  <div class="perfil-card">
+    <h2>Mi Perfil</h2>
+
+    <div class="perfil-img">
+      <img [src]="getAvatarUrl(usuario.url_img1)" alt="Foto de perfil" />
+      <img *ngIf="usuario.categoria === 'paciente' && usuario.url_img2"
+           [src]="getAvatarUrl(usuario.url_img2)"
+           alt="Foto secundaria" />
+    </div>
+
+    <p><strong>Nombre:</strong> {{ usuario.nombre }}</p>
+    <p><strong>Apellido:</strong> {{ usuario.apellido }}</p>
+    <p><strong>Edad:</strong> {{ usuario.edad }}</p>
+    <p><strong>DNI:</strong> {{ usuario.dni }}</p>
+
+    <div *ngIf="usuario.categoria === 'paciente'">
+      <p><strong>Obra Social:</strong> {{ usuario.obra_social || 'No especificada' }}</p>
+    </div>
+
+    <div *ngIf="usuario.categoria === 'especialista'">
+      <p><strong>Especialidades:</strong></p>
+      <ul>
+        <li *ngFor="let esp of especialidadesDisponibles">{{ esp }}</li>
+      </ul>
+      <button [routerLink]="['/home/perfil/agregar-especialidad']">Agregar Especialidad</button>
+
+      <div *ngIf="disponibilidad.length > 0">
+        <p><strong>Disponibilidad Horaria:</strong></p>
+        <ul>
+          <li *ngFor="let d of disponibilidad">{{ d.dia }}: {{ d.horas[0] }} - {{ d.horas[1] }}</li>
+        </ul>
+        <button [routerLink]="['/home/perfil/disponibilidad']">Modificar Horarios</button>
+      </div>
+
+      <div *ngIf="disponibilidad.length === 0">
+        <p>No hay disponibilidad cargada.</p>
+        <button [routerLink]="['/home/perfil/disponibilidad']">Cargar Horarios</button>
+      </div>
+    </div>
+
+    <div *ngIf="usuario.categoria === 'paciente'">
+      <button
+        [routerLink]="['/home/usuarios/historias-clinicas']"
+        [queryParams]="{ pacienteId: usuario.id}"
+      >
+        Ver historia clinica            
+      </button>
+      <button (click)="abrirSelectorDescarga()">Descargar historia clinica</button>
+    </div>
+
+    <div *ngIf="mostrarSelectorDescarga" class="modal-backdrop">
+      <div class="modal-dialog">
+        <h3>¿Qué historia clínica querés descargar?</h3>
+        <select [(ngModel)]="especialistaSeleccionado">
+          <option value="todos">Toda la historia clínica</option>
+          <option *ngFor="let id of getEspecialistaIds()" [value]="id">
+            {{ especialistasAtendieronPaciente[id].nombre }} {{ especialistasAtendieronPaciente[id].apellido }}
+          </option>
+        </select>
+        <br><br>
+        <button (click)="confirmarDescarga()">Descargar</button>
+        <button (click)="cerrarSelectorDescarga()">Cancelar</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div *ngIf="!usuario" class="loading-message">
+  Cargando datos del usuario...
+</div>
+

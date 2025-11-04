@@ -1,0 +1,26 @@
+<div class="especialidades-container">
+  <h2>Especialidades</h2>
+
+  <table *ngIf="especialidades.length > 0">
+    <thead>
+      <tr>
+        <th>Especialidad</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let esp of especialidades">
+        <td>{{ esp.nombre }} </td>
+        <td>
+          <button (click)="actualizarEstado(esp)" [habilitado]="esp.habilitado">
+            {{ esp.habilitado ? 'Deshabilitar' : 'Habilitar' }}
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="especialidades.length === 0" class="no-users-message">
+    No hay especialidades registradas.
+  </div>
+</div>

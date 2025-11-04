@@ -1,0 +1,44 @@
+<div class="historia-clinica-container">
+  <h2>Cargar Historia Clínica</h2>
+
+  <form (ngSubmit)="crearHistoriaClinicaPaciente()" #formHistoria="ngForm">
+
+    <!-- Datos fijos -->
+    <div class="campo">
+      <label>Altura (cm)</label>
+      <input type="number" name="altura" [(ngModel)]="historiaClinica.altura" required>
+    </div>
+
+    <div class="campo">
+      <label>Peso (kg)</label>
+      <input type="number" name="peso" [(ngModel)]="historiaClinica.peso" required>
+    </div>
+
+    <div class="campo">
+      <label>Temperatura (°C)</label>
+      <input type="number" name="temperatura" [(ngModel)]="historiaClinica.temperatura" required>
+    </div>
+
+    <div class="campo">
+      <label>Presión</label>
+      <input type="text" name="presion" [(ngModel)]="historiaClinica.presion" required>
+    </div>
+
+    <!-- Datos dinámicos -->
+    <div class="datos-dinamicos">
+      <h3>Datos adicionales (máximo 3)</h3>
+
+      <div *ngFor="let item of datosDinamicosTemp; let i = index" class="dato-dinamico">
+        <input type="text" placeholder="Clave" [(ngModel)]="item.clave" name="clave{{i}}" required>
+        <input type="text" placeholder="Valor" [(ngModel)]="item.valor" name="valor{{i}}" required>
+        <button type="button" (click)="eliminarDatoDinamico(i)">🗑️</button>
+      </div>
+
+      <button type="button" (click)="agregarDatoDinamico()" [disabled]="datosDinamicosTemp.length >= 3">
+        + Agregar dato adicional
+      </button>
+    </div>
+
+    <button type="submit" [disabled]="!formHistoria.valid">Guardar Historia Clínica</button>
+  </form>
+</div>

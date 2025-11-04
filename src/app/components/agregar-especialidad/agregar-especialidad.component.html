@@ -1,0 +1,15 @@
+<div class="agregar-container">
+  <h2>Agregar Especialidad</h2>
+
+  <div class="form-row especialidad-input-group">
+    <label>Especialidades:</label>
+    <input list="especialidades" [(ngModel)]="especialidadSeleccionada" name="especialidadSeleccionada" placeholder="Seleccioná o agrega una especialidad" />
+    <datalist id="especialidades">
+      <option *ngFor="let esp of especialidadesDisponibles" [value]="esp.nombre"></option>
+    </datalist>
+
+    <button type="button" (click)="agregarEspecialidad()">Agregar</button>
+    <div class="form-succes" *ngIf="msg">{{ msg }}</div>
+    <div class="form-error" *ngIf="errorMsg">{{ errorMsg }}</div>
+  </div>
+</div>

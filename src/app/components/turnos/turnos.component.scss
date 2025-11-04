@@ -1,0 +1,121 @@
+.turnos-container {
+  max-width: 800px;
+  margin: 0 auto 40px auto;
+  padding: 30px 40px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #2c3e50;
+  }
+
+  .filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    justify-content: center;
+    margin-bottom: 30px;
+
+    .filtro-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      min-width: 200px;
+
+      label {
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #2c3e50;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 8px 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+        transition: border-color 0.3s ease;
+
+        &:focus {
+          border-color: #3498db;
+          outline: none;
+        }
+      }
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+
+    thead {
+      background-color: #3498db;
+      color: white;
+
+      th {
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+      }
+    }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid #ddd;
+
+        &:hover {
+          background-color: #f1f9ff;
+        }
+      }
+
+      td {
+        padding: 12px;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  /* Mensaje cuando no hay turnos */
+  .no-turnos-message {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+    margin-top: 20px;
+  }
+
+  button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #2980b9;
+    }
+  }
+
+  input[placeholder="Comentario"] {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-right: 8px;
+    font-size: 14px;
+    width: 160px;
+
+    &:focus {
+      border-color: #3498db;
+      outline: none;
+    }
+  }
+}
+

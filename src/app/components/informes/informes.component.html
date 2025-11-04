@@ -1,0 +1,44 @@
+<section>
+  <h2>Turnos por Especialidad</h2>
+
+  
+ <div *ngIf="!mostrar" style="max-width: 500px; margin-bottom: 1rem; ">
+    <canvas
+      baseChart
+      [data]="{
+        labels: pieChartLabels,
+        datasets: [{ data: pieChartData, backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726', '#AB47BC', '#FF7043'] }]
+      }"
+      [type]="'pie'"
+      [options]="pieChartOptions">
+    </canvas>
+  </div>
+  
+  <!-- Botones -->
+  <div style="display: flex; gap: 10px;">
+    <button (click)="exportToExcelTurnosPorEspecialidad()">📊 Exportar Gráfico a Excel</button>
+    <button (click)="exportToPDFTurnosPorEspecialidad()">🖨️ Exportar Gráfico a PDF</button>
+  </div>
+
+    <div style="max-width: 500px; margin-bottom: 1rem;">
+    <canvas
+      #pieChartDia
+      baseChart
+      [data]="{
+        labels: pieChartTurnosPorDiaLabels,
+        datasets: [{
+          data: pieChartTurnosPorDiaData,
+          backgroundColor: ['#FFA726', '#66BB6A', '#AB47BC', '#42A5F5', '#FF7043', '#26C6DA']
+        }]
+      }"
+      [type]="'pie'"
+      [options]="pieChartTurnosPorDiaOptions">
+    </canvas>
+  </div>
+
+  <!-- Botones de exportación por Día -->
+  <div style="display: flex; gap: 10px;">
+    <button (click)="exportToExcelTurnosPorDia()">📊 Exportar Turnos por Día a Excel</button>
+    <button (click)="exportToPDFTurnosPorDia()">🖨️ Exportar Turnos por Día a PDF</button>
+  </div>
+</section>

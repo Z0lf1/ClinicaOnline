@@ -1,0 +1,49 @@
+<div class="turnos-container">
+  <h2>Turnos de la clínica</h2>
+
+  <!-- Filtros -->
+  <div class="filtros">
+    <div class="filtro-item">  
+      <label for="filtro-especialidad">Especialidad:</label>
+      <input id="filtro-especialidad" type="text" [(ngModel)]="busquedaEspecialidad" placeholder="Buscar por especialidad"/>
+    </div>
+    <div class="filtro-item">
+      <label for="filtro-especialista">Especialista:</label>
+      <input id="filtro-especialista" type="text" [(ngModel)]="busquedaEspecialista" placeholder="Buscar por especialista"/>
+    </div>    
+  </div>
+
+  <!-- Listado de turnos -->
+  <table>
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Especialidad</th>
+        <th>Paciente</th>
+        <th>Especialista</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let t of turnos | filtroEpecialidad: busquedaEspecialidad | filtroEpecialista: busquedaEspecialista">
+        <td>{{ t.fecha | date: 'shortDate' }}</td>
+        <td>{{ t.fecha | date: 'shortTime' }}</td>
+        <td>{{ t.especialidad }}</td>
+        <td>{{ t.paciente_nombre }}</td>
+        <td>{{ t.especialista_nombre }}</td>
+
+
+
+        <td>{{ t.estado }}</td>
+        <td>
+            <div *ngIf="t.estado == 'pendiente'">
+            <input type="text" placeholder="Comentario" [(ngModel)]="comentariosAdmin[t.id]" />
+            <button (click)="cancelarTurno(t.id, comentariosAdmin[t.id])">Cancelar</button>
+            </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

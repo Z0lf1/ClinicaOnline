@@ -1,0 +1,185 @@
+<div class="mis-turnos-container">
+  <h2>Mis Turnos</h2>
+
+  <!-- Filtros -->
+  <div class="filtros">
+    <div class="filtros-arriba">
+      <div class="filtro-item">  
+        <label for="filtro-especialidad">Especialidad:</label>
+        <input id="filtro-especialidad" type="text" [(ngModel)]="busquedaEspecialidad" placeholder="Especialidad"/>
+      </div>
+      <div *ngIf="usuario?.categoria === 'paciente'" class="filtro-item">
+        <label for="filtro-especialista">Especialista:</label>
+        <input id="filtro-especialista" type="text" [(ngModel)]="busquedaEspecialistaPaciente" placeholder="Especialista"/>
+      </div>
+      <div *ngIf="usuario?.categoria === 'especialista'" class="filtro-item">
+        <label for="filtro-paciente">Paciente:</label>
+        <input id="filtro-paciente" type="text" [(ngModel)]="busquedaEspecialistaPaciente" placeholder="Paciente"/>
+      </div>
+      <div class="filtro-item">  
+        <label for="filtro-estado">Estado:</label>
+        <input id="filtro-estado" type="text" [(ngModel)]="busquedaEstado" placeholder="Estado"/>
+      </div>
+      <div class="filtro-item">  
+        <label for="filtro-fecha">Fecha:</label>
+        <input id="filtro-fecha" type="text" [(ngModel)]="busquedafecha" placeholder="Fecha"/>
+      </div>
+      <div class="filtro-item">  
+        <label for="filtro-hora">Hora:</label>
+        <input id="filtro-hora" type="text" [(ngModel)]="busquedahora" placeholder="Horario"/>
+      </div>
+    </div>
+    <div class="filtro-historiaClinica-container">
+      <div class="filtro-item">  
+        <label for="filtro-historiaClinica">Filtrar por cualquier dato de la historia clinica:</label>
+        <input id="filtro-historiaClinica" type="text" [(ngModel)]="busquedaHistoriaClinica" placeholder="valor"/>     
+      </div> 
+    </div>     
+  </div>
+
+
+  <table>
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Especialidad</th>
+        <th *ngIf="usuario?.categoria === 'paciente'">Especialista</th>
+        <th *ngIf="usuario?.categoria === 'especialista'">Paciente</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let t of turnos | filtroEpecialidad: busquedaEspecialidad | filtroEpecialistaPaciente: busquedaEspecialistaPaciente : usuario?.categoria | estado: busquedaEstado
+        | fecha: busquedafecha | hora: busquedahora | historiaClinica: busquedaHistoriaClinica">
+        <td>{{ t.fecha | date: 'shortDate' }}</td>
+        <td>{{ t.fecha | date: 'shortTime' }}</td>  
+        <td>{{ t.especialidad }}</td>
+        <td>
+          <ng-container *ngIf="usuario?.categoria === 'paciente'">
+            {{ t.especialista?.nombre }} {{ t.especialista?.apellido }}
+          </ng-container>
+          <ng-container *ngIf="usuario?.categoria === 'especialista'">
+            {{ t.paciente?.nombre }} {{ t.paciente?.apellido }}
+          </ng-container>
+        </td>
+        <td>{{ t.estado }}</td>
+        <td>
+        <!-- Acciones PACIENTE -->
+        <ng-container *ngIf="usuario?.categoria === 'paciente'">
+            
+            <textarea
+              *ngIf="t.estado === 'pendiente' || t.estado === 'aceptado'"
+              class="input-comentario"
+              placeholder="Comentario"
+              [(ngModel)]="comentariosPaciente[t.id]"
+            ></textarea>
+
+            <div *ngIf="msgError[t.id] && t.estado === 'pendiente' || t.estado === 'aceptado'" class="error-msg">
+                {{ msgError[t.id] }}
+            </div>
+
+            <button *ngIf="t.estado === 'pendiente' || t.estado === 'aceptado'" (click)="cancelarTurno(t.id, comentariosPaciente[t.id])">Cancelar</button> 
+            
+            <button *ngIf="t['reseña']" (click)="verResena(t)">
+                {{ resenasVisibles[t.id] ? 'Ocultar Reseña' : 'Ver Reseña' }}        
+            </button>
+            <div *ngIf="resenasVisibles[t.id]" class="reseña-visible">
+            <strong>Reseña:</strong> {{ t['reseña'] }}
+            </div>
+
+            <button *ngIf="t.estado === 'realizado' && !t.calificacion" (click)="verCalificacion(t)">
+                {{ calificacionVisible[t.id] ? 'Ocultar Calificación' : 'Calificar Atención' }}
+            </button>
+            
+            <button *ngIf="t.estado === 'realizado' && !t.encuesta" (click)="verEncuesta(t)">
+                {{ encuestaVisible[t.id] ? 'Ocultar Encuesta' : 'Completar Encuesta' }}
+            </button>
+
+            <div *ngIf="t.estado === 'realizado' && calificacionVisible[t.id] && !t.calificacion " class="calificacion-container">
+                <p>Califique la atención del 1 al 10:</p>
+                <div class="puntaje">
+                    <div
+                        *ngFor="let punto of [1,2,3,4,5,6,7,8,9,10]"
+                        (click)="calificarAtencion(t.id, punto.toString())"
+                        [ngClass]="{ 'punto-container': true, 'seleccionado': puntajeSeleccionado[t.id] == punto.toString() }"
+                    >
+                        <span class="punto">●</span> 
+                        <span class="numero">{{ punto }}</span> 
+                    </div>
+                </div>
+                <div *ngIf="msgError[t.id]" class="error-msg">
+                {{ msgError[t.id] }}
+                </div>
+            </div>
+
+            <button 
+                *ngIf="t.estado === 'realizado' && puntajeSeleccionado[t.id] && !t.calificacion && calificacionVisible[t.id]" 
+                (click)="enviarCalificacion(t.id)">
+                Enviar Calificación
+            </button>
+
+            <div *ngIf="t.estado === 'realizado' && encuestaVisible[t.id] && !t.encuesta" class="encuesta-container">
+                <p>Contanos cómo fue tu experiencia:</p>
+                <textarea
+                class="input-comentario"
+                placeholder="Escribí tu opinión"
+                [(ngModel)]="comentariosPaciente[t.id]"
+                ></textarea>
+
+                <button (click)="completarEncuesta(t.id, comentariosPaciente[t.id])">Enviar Encuesta</button>
+
+                <div *ngIf="msgError[t.id]" class="error-msg">
+                {{ msgError[t.id] }}
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- Acciones ESPECIALISTA -->
+        <ng-container *ngIf="usuario?.categoria === 'especialista'">
+            <textarea
+              *ngIf="t.estado === 'pendiente'"
+              class="input-comentario"
+              placeholder="Comentario"
+              [(ngModel)]="comentariosEspecialista[t.id]"
+            ></textarea>
+
+            <div *ngIf="msgError[t.id] && t.estado === 'pendiente'" class="error-msg">
+                {{ msgError[t.id] }}
+            </div>
+
+            <button *ngIf="t.estado === 'pendiente'" (click)="cancelarTurno(t.id, comentariosEspecialista[t.id])">Cancelar</button>
+            <button *ngIf="t.estado === 'pendiente'" (click)="rechazarTurno(t.id, comentariosEspecialista[t.id])">Rechazar</button>
+            <button *ngIf="t.estado === 'pendiente'" (click)="aceptarTurno(t.id)">Aceptar</button>
+
+            <textarea
+              *ngIf="t.estado === 'aceptado'"
+              class="input-comentario"
+              placeholder="Reseña"
+              [(ngModel)]="comentariosEspecialista[t.id]"
+            ></textarea>
+
+            <div *ngIf="msgError[t.id] && t.estado === 'aceptado'" class="error-msg">
+                {{ msgError[t.id] }}
+            </div>
+
+            <button *ngIf="t.estado === 'aceptado'" (click)="finalizarTurno(t.id, comentariosEspecialista[t.id])">Finalizar Turno</button>
+            <button *ngIf="t.estado === 'realizado' && !t.historia_clinica" 
+              [routerLink]="['/home/mis-turnos/cargar-historia-clinica']"
+              [queryParams]="{ turnoId: t.id }"
+            >
+            Cargar historia clinica</button>
+            <button *ngIf="t['reseña']" (click)="verResena(t)">
+                {{ resenasVisibles[t.id] ? 'Ocultar Reseña' : 'Ver Reseña' }}        
+            </button>
+            <div *ngIf="resenasVisibles[t.id]" class="reseña-visible">
+            <strong>Reseña:</strong> {{ t['reseña'] }}
+            </div>
+        </ng-container>
+        </td>
+
+      </tr>
+    </tbody>
+  </table>
+</div>

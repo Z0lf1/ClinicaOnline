@@ -1,0 +1,151 @@
+.usuarios-container {
+  max-width: 1000px;
+  margin: 0 auto 40px auto;
+  padding: 30px 40px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+
+  .header {
+    position: relative; 
+    text-align: center; 
+    margin-bottom: 25px;
+
+    h2 {
+      margin: 0 auto; 
+      color: #2c3e50;
+      display: inline-block;
+    }
+
+    button {
+      position: absolute; 
+      right: 0; 
+      top: 50%; 
+      transform: translateY(-50%); 
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #2980b9;
+      }
+    }
+  }
+
+  .cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; 
+  }
+
+  
+  .usuario-card {
+    background-color: #fafafa;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: visible;
+
+    
+    transition: box-shadow 0.3s ease;
+    cursor: default;
+
+    &:hover {
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    }
+
+    img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #3498db;
+      margin-left: 20px;
+      position: relative;
+      z-index: 1;
+      position: relative;
+      display: inline-block;          
+      pointer-events: auto !important; 
+      user-select: none;              
+      transition: transform 0.3s ease;
+      cursor: zoom-in; 
+      
+    }
+
+  }
+
+  .usuario-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 20px;
+    flex: 1;
+    max-width: 70%;
+
+    div {
+      min-width: 120px;
+      font-size: 14px;
+      color: #444;
+
+      strong {
+        font-weight: 600;
+        margin-right: 6px;
+        color: #2c3e50;
+      }
+    }
+
+    .habilitado-text {
+      min-width: 100px;
+    }
+    
+  }
+
+
+  .usuario-acciones {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 150px;
+
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #2980b9;
+      }
+    }
+  }
+
+  .categoria-titulo {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 12px;
+    font-size: 20px;
+    color: #2c3e50;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 4px;
+  }
+
+  .no-users-message {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+    margin-top: 20px;
+  }
+}
