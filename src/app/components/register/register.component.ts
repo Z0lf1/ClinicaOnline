@@ -103,7 +103,7 @@ export class RegisterComponent implements OnInit, AfterViewInit{
       const captchaDiv = document.getElementById('captcha');
       if (captchaDiv && (window as any).grecaptcha) {
         (window as any).grecaptcha.render('captcha', {
-          'sitekey': '6LeeBGgrAAAAAJ3-Ql_0OZVwhaf4U1Y2uCKvu_uQ'
+          'sitekey': '6Le9lgIsAAAAAEn6rwSbUACf59ywqxHfdl98zkKf'
         });
         clearInterval(checkInterval);
       }
