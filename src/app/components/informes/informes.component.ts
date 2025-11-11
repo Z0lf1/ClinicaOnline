@@ -28,7 +28,27 @@ export class InformesComponent implements OnInit {
 
   @ViewChild(BaseChartDirective, {static:false}) pieChart!: BaseChartDirective;
   @ViewChild('pieChartDia', { static: false }) pieChartTurnosPorDia!: BaseChartDirective;
+  @ViewChild('pieChartSolicitados', { static: false }) pieChartSolicitados!: BaseChartDirective;
+  @ViewChild('pieChartFinalizados', { static: false }) pieChartFinalizados!: BaseChartDirective;
+  @ViewChild('pieChartLogs', { static: false }) pieChartLogs!: BaseChartDirective;
 
+  pieChartSolicitadosLabels: string[] = [];
+  pieChartSolicitadosData: number[] = [];
+
+  pieChartFinalizadosLabels: string[] = [];
+  pieChartFinalizadosData: number[] = [];
+
+  pieChartLogsLabels: string[] = [];
+  pieChartLogsData: number[] = [];
+
+  commonPieOptions: ChartOptions<'pie'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: { enabled: true }
+    }
+  };
   mostrar: boolean = false;
 
   pieChartLabels: string[] = [];
@@ -186,7 +206,7 @@ constructor(private router: Router){}
 
   loadTurnosSolicitadosPorMedico() {
   supabase.from('turnos')
-    .select('especialista_id, especialista(nombre, apellido)')
+    .select('especialista_id, usuariosclinica(nombre, apellido)')
     .then(({ data, error }) => {
       if (error) {
         console.error('Error en turnos solicitados por médico:', error.message);
@@ -198,8 +218,8 @@ constructor(private router: Router){}
       if (data) {
         data.forEach((turno: any) => {
           const id = turno.especialista_id;
-          const nombre = turno.especialista?.nombre || 'Desconocido';
-          const apellido = turno.especialista?.apellido || '';
+          const nombre = turno.usuariosclinica?.nombre || 'Desconocido';
+          const apellido = turno.usuariosclinica?.apellido || '';
 
           const existente = conteo.find(item => item.especialista_id === id);
           if (existente) {
@@ -211,12 +231,16 @@ constructor(private router: Router){}
       }
 
       this.turnosSolicitadosPorMedico = conteo;
+      this.pieChartSolicitadosLabels = conteo.map(m => `${m.nombre} ${m.apellido}`);
+      this.pieChartSolicitadosData = conteo.map(m => m.count);
+      this.pieChartSolicitados?.update();
     });
+
   }
 
   loadTurnosFinalizadosPorMedico() {
   supabase.from('turnos')
-    .select('especialista_id, estado, especialista(nombre, apellido)')
+    .select('especialista_id, estado, usuariosclinica(nombre, apellido)')
     .then(({ data, error }) => {
       if (error) {
         console.error('Error en turnos finalizados por médico:', error.message);

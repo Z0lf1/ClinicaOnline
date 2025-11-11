@@ -1,20 +1,38 @@
 <div class="disponibilidad-container">
   <h2>Configurar Disponibilidad Horaria</h2>
 
+  <!-- 🔹 Nuevo bloque: selector de duración de turno -->
+  <div class="config-turno">
+    <label>Duración del turno:</label>
+    <select [(ngModel)]="duracionTurno" name="duracionTurno" (change)="generarHorarios()">
+      <option [value]="15">15 min</option>
+      <option [value]="30">30 min</option>
+      <option [value]="45">45 min</option>
+      <option [value]="60">60 min</option>
+    </select>
+  </div>
+  <!-- 🔹 Fin del bloque agregado -->
+
   <form (ngSubmit)="guardarDisponibilidad()">
-    <div class="dia-row" *ngFor="let dia of disponibilidadEditable;let i = index">
+    <div class="dia-row" *ngFor="let dia of disponibilidadEditable; let i = index">
       <label>{{ dia.dia }}</label>
       
       <select [(ngModel)]="dia.hora_inicio" name="hora_inicio_{{ i }}">
         <option value="">Desde</option> 
         <option *ngFor="let hora of horariosPorDia[dia.dia]" [value]="hora">{{ hora }}</option>
       </select>
-
+<!-- 
       <select [(ngModel)]="dia.hora_fin" name="hora_fin_{{ i }}">
         <option value="">Hasta</option> 
         <option *ngFor="let hora of horariosPorDia[dia.dia]" [value]="hora">{{ hora }}</option>
-      </select>
-            
+      </select> -->
+      <select [(ngModel)]="dia.hora_fin" name="hora_fin_{{ i }}">
+  <option value="">Hasta</option> 
+  <option *ngFor="let hora of filtrarHorariosFin(dia.dia, dia.hora_inicio)" [value]="hora">
+    {{ hora }}
+  </option>
+</select>
+
     </div>
 
     <p class="error-msg" *ngIf="mensajeError">{{ mensajeError }}</p>

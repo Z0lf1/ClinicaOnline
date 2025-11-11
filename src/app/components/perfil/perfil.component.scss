@@ -3,19 +3,26 @@
   justify-content: center;
   align-items: flex-start;
   padding: 60px 30px;
-  background: linear-gradient(to bottom right, #ecf0f1, #dfe6e9);
+//background: linear-gradient(to bottom right, #ecf0f1, #dfe6e9);
   min-height: calc(100vh - 70px); // espacio para navbar
 
+
+
   .perfil-card {
-    background-color: #24b34ccc;
     padding: 50px 60px;
     border-radius: 16px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    font-family: 'Segoe UI', sans-serif;
-    color: #2c3e50;
+    
+   
     max-width: 700px;
     width: 100%;
     text-align: left;
+
+
+  background-color: rgba(255, 255, 255, 0.9);
+  
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
 
     h2 {
       text-align: center;

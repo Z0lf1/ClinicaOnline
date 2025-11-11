@@ -25,7 +25,7 @@ export class DisponibilidadComponent {
   horariosPorDia: { [key: string]: string[] } = {};
   mensaje: string = '';
   mensajeError: string = '';
-
+  duracionTurno: number = 30; // Duración fija de los turnos en minutos
   constructor(private router: Router) {}
 
   ngOnInit() {
@@ -126,25 +126,56 @@ export class DisponibilidadComponent {
     });
   }
 
-  generarHorarios() {
+//   generarHorarios() {
+//   this.horariosPorDia = {};
+
+//   for (let i = 0; i < this.diasDeSemana.length; i++) {
+//     const dia = this.diasDeSemana[i];
+//     const horarios = [];
+//     const limite = (dia === 'Sabado') ? 14 : 19;
+
+//     for (let hora = 8; hora <= limite; hora++) {
+//       const h = hora < 10 ? '0' + hora : '' + hora;
+
+//       horarios[horarios.length] = h + ':00';
+//       if (hora < limite) {
+//         horarios[horarios.length] = h + ':30';
+//       }
+//     }
+
+//     this.horariosPorDia[dia] = horarios;
+//   }
+// }
+generarHorarios() {
   this.horariosPorDia = {};
 
-  for (let i = 0; i < this.diasDeSemana.length; i++) {
-    const dia = this.diasDeSemana[i];
-    const horarios = [];
-    const limite = (dia === 'Sabado') ? 14 : 19;
+  const duracion = Number(this.duracionTurno) || 30;
 
-    for (let hora = 8; hora <= limite; hora++) {
-      const h = hora < 10 ? '0' + hora : '' + hora;
+  for (const dia of this.diasDeSemana) {
+    const horarios: string[] = [];
 
-      horarios[horarios.length] = h + ':00';
-      if (hora < limite) {
-        horarios[horarios.length] = h + ':30';
-      }
+    const inicioMinutos = 8 * 60; // 08:00
+    const finMinutos = Math.floor((dia.toLowerCase() === 'Sabado' ? 14.5 : 19.5) * 60); // 14:30 o 19:30 exactos
+
+    for (let minutos = inicioMinutos; minutos <= finMinutos; minutos += duracion) {
+      const horas = Math.floor(minutos / 60);
+      const mins = minutos % 60;
+      const horaStr = `${horas.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+      horarios.push(horaStr);
     }
 
-    this.horariosPorDia[dia] = horarios;
+      this.horariosPorDia[dia] = horarios;
   }
+
+  console.log('Duración de turno:', duracion, 'horarios generados:', this.horariosPorDia);
+}
+
+
+filtrarHorariosFin(dia: string, horaInicio: string): string[] {
+  const todos = this.horariosPorDia[dia] || [];
+  if (!horaInicio) return todos; // si no hay inicio, mostrar todos
+  const indiceInicio = todos.indexOf(horaInicio);
+  return todos.slice(indiceInicio + 1); // solo los que vienen después
 }
 
 

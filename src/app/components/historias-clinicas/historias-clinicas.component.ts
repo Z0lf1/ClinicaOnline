@@ -43,7 +43,7 @@ export class HistoriasClinicasComponent implements OnInit{
   loadHistoriasClinicasPaciente(pacienteId: string){
     if (pacienteId) {
         supabase
-        .from('historias-clinicas')
+        .from('historias_clinicas')
         .select('*')
         .eq('paciente_id',pacienteId)
         .then(({data,error}) =>{

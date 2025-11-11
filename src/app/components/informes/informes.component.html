@@ -1,8 +1,7 @@
-<section>
+<section style="display: flex; flex-direction: column; align-items: center;">
   <h2>Turnos por Especialidad</h2>
 
-  
- <div *ngIf="!mostrar" style="max-width: 500px; margin-bottom: 1rem; ">
+  <div *ngIf="!mostrar" style="max-width: 500px; margin-bottom: 1rem;">
     <canvas
       baseChart
       [data]="{
@@ -13,14 +12,14 @@
       [options]="pieChartOptions">
     </canvas>
   </div>
-  
+
   <!-- Botones -->
-  <div style="display: flex; gap: 10px;">
+  <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 2rem;">
     <button (click)="exportToExcelTurnosPorEspecialidad()">📊 Exportar Gráfico a Excel</button>
     <button (click)="exportToPDFTurnosPorEspecialidad()">🖨️ Exportar Gráfico a PDF</button>
   </div>
-
-    <div style="max-width: 500px; margin-bottom: 1rem;">
+  <h2>Turnos por Dias</h2>
+  <div style="max-width: 500px; margin-bottom: 1rem;">
     <canvas
       #pieChartDia
       baseChart
@@ -37,7 +36,7 @@
   </div>
 
   <!-- Botones de exportación por Día -->
-  <div style="display: flex; gap: 10px;">
+  <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 2rem;">
     <button (click)="exportToExcelTurnosPorDia()">📊 Exportar Turnos por Día a Excel</button>
     <button (click)="exportToPDFTurnosPorDia()">🖨️ Exportar Turnos por Día a PDF</button>
   </div>

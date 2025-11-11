@@ -97,7 +97,7 @@ export class CargarHistoriaClinicaComponent implements OnInit {
 
     // Insertar en Supabase
     supabase
-      .from('historias-clinicas')
+      .from('historias_clinicas')
       .insert(this.historiaClinica)
       .then(({ data, error }) => {
         if (error) {
