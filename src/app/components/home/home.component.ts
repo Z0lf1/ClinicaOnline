@@ -32,7 +32,7 @@ const supabase = createClient(environment.apiUrl, environment.publicAnonKey);
         query(':leave', animateChild(), { optional: true }),
         group([
           query(':leave', [
-            animate('3000ms ease-out', style({ top: '100%', opacity: 0 }))
+            animate('500ms ease-out', style({ top: '100%', opacity: 0 }))
           ], { optional: true }),
           query(':enter', [
             animate('1500ms ease-out', style({ top: '0%', opacity: 1 }))
@@ -92,6 +92,7 @@ export class HomeComponent implements OnInit{
           console.error('No se encontraron datos para el usuario');
           return;
         }
+        console.log('Datos del usuario:', data);
         this.usuario = data; 
       })
       

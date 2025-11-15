@@ -811,7 +811,7 @@ aplicarFiltro() {
   loadTurnosComparativoPorMedico() {
   // Traer turnos junto a la información del especialista
   supabase.from('turnos')
-    .select('especialista_id, estado, usuariosclinica(nombre, apellido)')
+    .select('especialista_id, estado, usuariosclinica:especialista_id(nombre, apellido)')
     .then(({ data, error }) => {
       if (error) {
         console.error('Error cargando turnos para gráfico comparativo:', error.message);

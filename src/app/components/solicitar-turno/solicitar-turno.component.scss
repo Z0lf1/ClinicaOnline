@@ -47,11 +47,6 @@
     font-size: 16px;
     border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-      background-color: #095e5e;
-    }
     margin-top: 24px;
   }
 }
@@ -176,7 +171,8 @@
   width: 100px !important;
   height: 100px !important;
   border-radius: 0px !important;
-  background-color: #ecf0f1;
+  background-color: #ecf0f1 !important;
+  border: none !important;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -185,10 +181,10 @@
   font-size: 12px;
   text-align: center;
   padding: 6px;
-  transition: background-color 0.3s ease;
+  margin: 0 !important;
 
   &:hover {
-    background-color: #d0e6f7;
+    background-color: #d0e6f7 !important;
   }
   
   &.selected {
@@ -196,6 +192,40 @@
     color: #2a0ac9 !important;               
     font-weight: 700 !important;
     border: 2px solid #2c3e50 !important;
+  }
+}
+
+.hover-lift {
+  transition: transform 0.6s ease;
+
+  &:hover {
+    transform: translateY(-8px);
+  }
+}
+
+.btn-hover-darken {
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #095e5e;
+  }
+}
+
+.btn-shake {
+  &:hover {
+    animation: shake 0.3s ease-in-out;
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0) rotate(0deg);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-2px) rotate(-1deg);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(2px) rotate(1deg);
   }
 }
 
@@ -215,7 +245,6 @@
   cursor: pointer;
   font-weight: 600;
   font-size: 13px;
-  transition: background-color 0.2s ease;
   
 
   &:hover {

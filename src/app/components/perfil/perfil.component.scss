@@ -12,7 +12,7 @@
     padding: 50px 60px;
     border-radius: 16px;
     
-   
+    
     max-width: 700px;
     width: 100%;
     text-align: left;
@@ -23,6 +23,7 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   font-family: 'Segoe UI', sans-serif;
   color: #333;
+  animation: slideDownFadeIn 0.8s ease-out;
 
     h2 {
       text-align: center;
@@ -150,3 +151,14 @@
     }
   }
 }
+@keyframes slideDownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

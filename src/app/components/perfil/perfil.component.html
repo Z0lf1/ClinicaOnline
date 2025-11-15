@@ -1,5 +1,5 @@
-<div class="perfil-container" *ngIf="usuario">
-  <div class="perfil-card">
+<div class="perfil-container">
+  <div class="perfil-card" *ngIf="usuario">
     <h2>Mi Perfil</h2>
 
     <div class="perfil-img">
@@ -70,4 +70,3 @@
 <div *ngIf="!usuario" class="loading-message">
   Cargando datos del usuario...
 </div>
-

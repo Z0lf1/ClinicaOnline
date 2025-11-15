@@ -57,7 +57,7 @@
     </select>
   </div>
 
-  <button (click)="crearTurno()">Confirmar Turno</button>
+  <button class="btn-hover-darken btn-shake" (click)="crearTurno()">Confirmar Turno</button>
 </div>
 
 <!-- solo para pacientes-->
@@ -88,7 +88,7 @@
     <div class="dias-disponibles">
       <button
         *ngFor="let dia of diasDisponibles"
-        class="dia-card"
+        class="dia-card hover-lift"
         [class.selected]="diaSeleccionado === dia.fecha"
         (click)="diaSeleccionado = dia.fecha; diaSeleccionadoChange(dia.fecha)">
         {{ dia.fecha | date: 'dd-MM-yyyy' }}
@@ -99,7 +99,7 @@
     <div class="horas-disponibles">
       <button
         *ngFor="let hora of getHorariosParaDiaSeleccionado()"
-        class="hora-card"
+        class="hora-card hover-lift"
         [class.selected]="horaSeleccionada === hora"
         (click)="onHoraSeleccionadaChange(hora)">
         {{ formatoHoraAMPM(hora) }}
@@ -107,5 +107,5 @@
     </div>
   </div>
 
-  <button *ngIf="turno.especialista_id && turno.especialidad" (click)="crearTurno()">Confirmar Turno</button>
+  <button *ngIf="turno.especialista_id && turno.especialidad" class="btn-hover-darken btn-shake" (click)="crearTurno()">Confirmar Turno</button>
 </div>

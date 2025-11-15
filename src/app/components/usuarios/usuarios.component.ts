@@ -8,14 +8,13 @@ import { FormsModule } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import {saveAs} from 'file-saver';
 import { CategoriaDirective } from '../../directivas/Categoria.directive';
-import { ZoomDirective } from '../../directivas/zoom.directive';
 
 
 const supabase = createClient(environment.apiUrl, environment.publicAnonKey);
 
 @Component({
   selector: 'app-usuarios',
-  imports: [CommonModule,FormsModule,RouterLink,CategoriaDirective,ZoomDirective],
+  imports: [CommonModule,FormsModule,RouterLink,CategoriaDirective],
   templateUrl: './usuarios.component.html',
   styleUrl: './usuarios.component.scss'
 })
