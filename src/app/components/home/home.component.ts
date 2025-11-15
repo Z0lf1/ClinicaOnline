@@ -92,7 +92,6 @@ export class HomeComponent implements OnInit{
           console.error('No se encontraron datos para el usuario');
           return;
         }
-        console.log('Datos del usuario:', data);
         this.usuario = data; 
       })
       
