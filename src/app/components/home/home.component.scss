@@ -55,11 +55,73 @@
     font-family: 'Segoe UI', sans-serif;
     color: #333;
     text-align: center;
+    animation: fadeInUp 1.2s ease-out;
 
     p {
       font-size: 16px;
       margin-top: 10px;
     }
+
+    .configuracion-captcha {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+
+      .toggle-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 16px;
+        color: #333;
+
+        .toggle-checkbox {
+          display: none;
+        }
+
+        .toggle-switch {
+          position: relative;
+          width: 50px;
+          height: 26px;
+          background-color: #ccc;
+          border-radius: 13px;
+          transition: background-color 0.3s;
+
+          &::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background-color: white;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+          }
+        }
+
+        .toggle-checkbox:checked + .toggle-switch {
+          background-color: #00ffff;
+
+          &::after {
+            transform: translateX(24px);
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 .no-habilitada {

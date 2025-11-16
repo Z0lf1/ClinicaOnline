@@ -57,7 +57,9 @@
     </select>
   </div>
 
-  <button class="btn-hover-darken btn-shake" (click)="crearTurno()">Confirmar Turno</button>
+  <div *ngIf="captchaHabilitado" id="captcha" class="g-recaptcha" data-sitekey="6Le9HA4sAAAAABU7Wg6hc1Vlznz-vuPxySrg-CLB"></div>
+
+  <button class="btn-hover-darken btn-shake" (click)="crearTurno()" [disabled]="captchaHabilitado && !captchaCompletado">Confirmar Turno</button>
 </div>
 
 <!-- solo para pacientes-->
@@ -107,5 +109,9 @@
     </div>
   </div>
 
-  <button *ngIf="turno.especialista_id && turno.especialidad" class="btn-hover-darken btn-shake" (click)="crearTurno()">Confirmar Turno</button>
+  <div *ngIf="turno.especialista_id && turno.especialidad">
+    <div *ngIf="captchaHabilitado" id="captcha-paciente" class="g-recaptcha" data-sitekey="6Le9HA4sAAAAABU7Wg6hc1Vlznz-vuPxySrg-CLB"></div>
+
+    <button class="btn-hover-darken btn-shake" (click)="crearTurno()" [disabled]="captchaHabilitado && !captchaCompletado">Confirmar Turno</button>
+  </div>
 </div>

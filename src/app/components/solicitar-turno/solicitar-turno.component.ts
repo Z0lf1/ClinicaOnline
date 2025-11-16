@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { createClient } from '@supabase/supabase-js';
 import { environment } from '../../../environments/environment.prod';
 import { Turno } from '../../models/turnos';
@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { Usuario } from '../../models/usuario';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CaptchaService } from '../../services/captcha.service';
+import { Subscription } from 'rxjs';
 
 const supabase = createClient(environment.apiUrl, environment.publicAnonKey);
 
@@ -16,9 +18,12 @@ const supabase = createClient(environment.apiUrl, environment.publicAnonKey);
   templateUrl: './solicitar-turno.component.html',
   styleUrl: './solicitar-turno.component.scss'
 })
-export class SolicitarTurnoComponent implements OnInit{
+export class SolicitarTurnoComponent implements OnInit, AfterViewInit, OnDestroy{
 
     usuario: Usuario | null = null;
+    captchaCompletado: boolean = false;
+    captchaHabilitado: boolean = true;
+    private captchaSubscription?: Subscription;
     turno: Turno = {
       paciente_id: '',
       especialista_id: '',
@@ -43,10 +48,93 @@ export class SolicitarTurnoComponent implements OnInit{
     sinEspecialistas: boolean = false;
     sinDisponibilidadHoraria: boolean = false;
 
-    constructor(private router : Router){}
+    constructor(
+      private router : Router,
+      private captchaService: CaptchaService
+    ){}
   
     ngOnInit(){
       this.getUserData();
+      this.captchaSubscription = this.captchaService.captchaHabilitado$.subscribe(
+        habilitado => {
+          this.captchaHabilitado = habilitado;
+          if (!habilitado) {
+            this.captchaCompletado = true; // Si está deshabilitado, considerar como completado
+          } else {
+            this.captchaCompletado = false; // Si se habilita, resetear
+          }
+        }
+      );
+    }
+
+    ngOnDestroy() {
+      this.captchaSubscription?.unsubscribe();
+    }
+
+    ngAfterViewInit() {
+      if (this.captchaHabilitado) {
+        this.renderizarCaptcha();
+      }
+    }
+
+    renderizarCaptcha() {
+      if (!this.captchaHabilitado) {
+        return;
+      }
+
+      const checkInterval = setInterval(() => {
+        const captchaDiv = document.getElementById('captcha');
+        const captchaPacienteDiv = document.getElementById('captcha-paciente');
+        
+        if ((captchaDiv || captchaPacienteDiv) && (window as any).grecaptcha) {
+          if (captchaDiv && !captchaDiv.hasChildNodes()) {
+            try {
+              (window as any).grecaptcha.render('captcha', {
+                'sitekey': '6Le9HA4sAAAAABU7Wg6hc1Vlznz-vuPxySrg-CLB',
+                'callback': () => this.onCaptchaResolved()
+              });
+            } catch (e) {
+              console.error('Error renderizando captcha:', e);
+            }
+          }
+          if (captchaPacienteDiv && !captchaPacienteDiv.hasChildNodes()) {
+            try {
+              (window as any).grecaptcha.render('captcha-paciente', {
+                'sitekey': '6Le9HA4sAAAAABU7Wg6hc1Vlznz-vuPxySrg-CLB',
+                'callback': () => this.onCaptchaResolved()
+              });
+            } catch (e) {
+              console.error('Error renderizando captcha paciente:', e);
+            }
+          }
+          if ((captchaDiv?.hasChildNodes() || captchaPacienteDiv?.hasChildNodes()) && 
+              (captchaDiv?.offsetParent !== null || captchaPacienteDiv?.offsetParent !== null)) {
+            clearInterval(checkInterval);
+          }
+        }
+      }, 500);
+      
+      // Limpiar el intervalo después de 10 segundos para evitar loops infinitos
+      setTimeout(() => clearInterval(checkInterval), 10000);
+    }
+
+    onCaptchaResolved() {
+      this.captchaCompletado = true;
+    }
+
+    resetearCaptcha() {
+      this.captchaCompletado = false;
+      // Limpiar el contenido del captcha para que se renderice de nuevo
+      const captchaDiv = document.getElementById('captcha');
+      const captchaPacienteDiv = document.getElementById('captcha-paciente');
+      
+      if (captchaDiv) {
+        captchaDiv.innerHTML = '';
+      }
+      
+      if (captchaPacienteDiv) {
+        captchaPacienteDiv.innerHTML = '';
+      }
     }
 
     getUserData(){
@@ -327,6 +415,14 @@ export class SolicitarTurnoComponent implements OnInit{
         return;
       }
 
+      if (this.captchaHabilitado) {
+        const token = (window as any).grecaptcha?.getResponse();
+        if (!token) {
+          console.error('Por favor completá el captcha.');
+          return;
+        }
+      }
+
       supabase
         .from('turnos')
         .insert([{
@@ -349,8 +445,8 @@ export class SolicitarTurnoComponent implements OnInit{
     onEspecialidadChange(nombreEspecialidad: string) {
       this.turno.especialidad = nombreEspecialidad;           
       this.diaSeleccionado = '';                 
-      this.horaSeleccionada = '';                                   
-
+      this.horaSeleccionada = '';
+      this.resetearCaptcha(); // Resetear captcha cuando cambia la especialidad
 
       if(this.esAdmin()){
         this.turno.especialista_id = '';
@@ -358,6 +454,11 @@ export class SolicitarTurnoComponent implements OnInit{
         this.loadEspecialistasPorEspecialidad(nombreEspecialidad);
         this.diasDisponibles = [];                 
         this.horasDisponibles = {};
+      } else {
+        // Para pacientes, renderizar captcha cuando se selecciona especialidad
+        if (this.captchaHabilitado) {
+          setTimeout(() => this.renderizarCaptcha(), 100);
+        }
       }
       
     }
@@ -365,7 +466,8 @@ export class SolicitarTurnoComponent implements OnInit{
     onEspecialistaChange(especialistaId: any) {
       this.turno.especialista_id = especialistaId;
       this.diaSeleccionado = '';                 
-      this.horaSeleccionada = '';                
+      this.horaSeleccionada = '';
+      this.resetearCaptcha(); // Resetear captcha cuando cambia el especialista
       this.diasDisponibles = [];                 
       this.horasDisponibles = {};
       

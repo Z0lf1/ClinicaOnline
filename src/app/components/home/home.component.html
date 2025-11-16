@@ -1,7 +1,13 @@
 <div *ngIf="cuentaHabilitada()">
   <nav class="navbar">
     <div class="navbar-container">
-      <span class="logo">Clínica Online</span>
+      
+      
+      <span class="logo" (click)="irAlHome()" style="cursor: pointer;">
+        Clínica Online
+      </span>
+
+      
       <ul class="nav-links">
         <li *ngIf="esAdmin()"><a [routerLink]="['solicitar-turno']">Cargar Turno</a></li>
         <li *ngIf="esAdmin()"><a [routerLink]="['turnos']">Turnos</a></li>
@@ -24,6 +30,14 @@
       <h2>Bienvenido{{ usuario?.nombre && usuario?.apellido ? ', ' + usuario?.nombre + ' ' + usuario?.apellido : '' }}!</h2>
       <p>Estás logueado como: <strong>{{ usuario?.categoria }}</strong></p>
       <p>Usá el menú superior para navegar por la aplicación.</p>
+      
+      <div *ngIf="esAdmin()" class="configuracion-captcha">
+        <div appToggleSwitch 
+             [label]="'Captcha habilitado:'" 
+             [ngModel]="captchaHabilitado" 
+             (ngModelChange)="onToggleChange($event)">
+        </div>
+      </div>
     </div>
   </div>
 

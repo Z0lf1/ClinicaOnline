@@ -36,6 +36,9 @@
     </div>
 
     <p class="error-msg" *ngIf="mensajeError">{{ mensajeError }}</p>
-    <button type="submit">Guardar Disponibilidad</button>
+    
+    <div *ngIf="captchaHabilitado" id="captcha-disponibilidad" class="g-recaptcha" data-sitekey="6Le9HA4sAAAAABU7Wg6hc1Vlznz-vuPxySrg-CLB"></div>
+
+    <button type="submit" [disabled]="captchaHabilitado && !captchaCompletado">Guardar Disponibilidad</button>
   </form>
 </div>

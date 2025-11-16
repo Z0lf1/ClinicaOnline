@@ -1,17 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { createClient } from '@supabase/supabase-js';
 import { environment } from '../../../environments/environment.prod';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Usuario } from '../../models/usuario';
 import { CommonModule } from '@angular/common';
-import { filter } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { filter, Subscription } from 'rxjs';
 import { trigger, transition, style, animate, query, animateChild, group, state, keyframes } from '@angular/animations';
+import { CaptchaService } from '../../services/captcha.service';
+import { ToggleSwitchDirective } from '../../directivas/toggle-switch.directive';
 
 const supabase = createClient(environment.apiUrl, environment.publicAnonKey);
 
 @Component({
   selector: 'app-home',
-  imports: [RouterOutlet, CommonModule,RouterLink],
+  imports: [RouterOutlet, CommonModule, RouterLink, FormsModule, ToggleSwitchDirective],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   animations:[
@@ -44,12 +47,17 @@ const supabase = createClient(environment.apiUrl, environment.publicAnonKey);
   ]
 })
 
-export class HomeComponent implements OnInit{
+export class HomeComponent implements OnInit, OnDestroy{
 
   rutaActual: string = '';
   usuario: Usuario | null = null;
+  captchaHabilitado: boolean = true;
+  private captchaSubscription?: Subscription;
 
-  constructor(private router : Router){}
+  constructor(
+    private router : Router,
+    private captchaService: CaptchaService
+  ){}
 
   ngOnInit() {
     this.rutaActual = this.router.url;
@@ -61,6 +69,28 @@ export class HomeComponent implements OnInit{
     });
   
     this.getUserData();
+    this.cargarEstadoCaptcha();
+  }
+
+  ngOnDestroy() {
+    this.captchaSubscription?.unsubscribe();
+  }
+
+  cargarEstadoCaptcha() {
+    this.captchaSubscription = this.captchaService.captchaHabilitado$.subscribe(
+      habilitado => {
+        this.captchaHabilitado = habilitado;
+      }
+    );
+  }
+
+  async onToggleChange(nuevoEstado: boolean) {
+    const resultado = await this.captchaService.actualizarEstadoCaptcha(nuevoEstado);
+    if (!resultado.exito) {
+      // Si falla, revertir el estado
+      this.captchaHabilitado = !nuevoEstado;
+      alert(resultado.mensaje || 'Error al actualizar la configuración del captcha');
+    }
   }
 
   prepareRoute(outlet: RouterOutlet) {
@@ -133,5 +163,10 @@ export class HomeComponent implements OnInit{
     const url = this.router.url;
     return url === '/home';
   }
+
+  irAlHome() {
+  this.router.navigate(['/home']);
+}
+
   
 }
