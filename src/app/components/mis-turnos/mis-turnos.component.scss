@@ -2,7 +2,7 @@
   max-width: 1000px;
   margin: 30px auto;
   padding: 20px 30px;
-  background-color: #24b34ccc;
+  background-color: #f3f3f3;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
@@ -74,8 +74,8 @@
     }
 
     thead {
-      background-color: #00ffff;
-      color: #2a0ac9;
+      background-color: #3F13B0;
+      color: #fff;
     }
 
     tbody tr:nth-child(even) {
@@ -83,7 +83,7 @@
     }
 
     tbody tr:hover {
-      background-color: #eef6fb;
+      background-color: #6ab5e4;
     }
   }
 
@@ -91,8 +91,8 @@
     margin-top: 4px;
     margin-right: 4px;
     padding: 5px 10px;
-    background-color: #00ffff;
-    color: #2a0ac9;
+  background-color: #3f13b0;
+    color: #fff;
     border: none;
     border-radius: 5px;
     font-size: 13px;

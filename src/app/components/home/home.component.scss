@@ -1,7 +1,7 @@
 .navbar {
-  background-color: #00ffff;
+  background-color: #3F13B0;
   padding: 15px 30px;
-  color: #2a0ac9;
+  color: #ffffff;
   font-family: 'Segoe UI', sans-serif;
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 
@@ -12,7 +12,7 @@
 
     .logo {
       font-weight: bold;
-      font-size: 20px;
+      font-size: 30px;
     }
 
     .nav-links {
@@ -21,14 +21,18 @@
       gap: 20px;
 
       li a {
-        color: #2a0ac9;
+        color: #ffffff;
         text-decoration: none;
-        font-weight: 500;
+        font-weight: bold;
         transition: color 0.3s;
         cursor : pointer;
-        
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 24px;
         &:hover {
-          color: #d60808;
+          
+          background-color:#371393 ;
+          
         }
       }
     }
@@ -103,7 +107,7 @@
         }
 
         .toggle-checkbox:checked + .toggle-switch {
-          background-color: #00ffff;
+          background-color: 3F13B0;
 
           &::after {
             transform: translateX(24px);

@@ -1,203 +1,10 @@
-<!-- <!-- <section style="display: flex; flex-direction: column; align-items: center;">
-  <h2>Turnos por Especialidad</h2>
-
-  <div *ngIf="!mostrar" style="max-width: 500px; margin-bottom: 1rem;">
-    <canvas
-      baseChart
-      [data]="{
-        labels: pieChartLabels,
-        datasets: [{ data: pieChartData, backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726', '#AB47BC', '#FF7043'] }]
-      }"
-      [type]="'pie'"
-      [options]="pieChartOptions">
-    </canvas>
-  </div>
-
-  <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 2rem;">
-    <button (click)="exportToExcelTurnosPorEspecialidad()">📊 Exportar Gráfico a Excel</button>
-    <button (click)="exportToPDFTurnosPorEspecialidad()">🖨️ Exportar Gráfico a PDF</button>
-  </div>
-
-  <h2>Turnos por Dias</h2>
-  <div style="max-width: 500px; margin-bottom: 1rem;">
-    <canvas
-      #pieChartDia
-      baseChart
-      [data]="{
-        labels: pieChartTurnosPorDiaLabels,
-        datasets: [{
-          data: pieChartTurnosPorDiaData,
-          backgroundColor: ['#FFA726', '#66BB6A', '#AB47BC', '#42A5F5', '#FF7043', '#26C6DA']
-        }]
-      }"
-      [type]="'pie'"
-      [options]="pieChartTurnosPorDiaOptions">
-    </canvas>
-  </div>
-
-  <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 2rem;">
-    <button (click)="exportToExcelTurnosPorDia()">📊 Exportar Turnos por Día a Excel</button>
-    <button (click)="exportToPDFTurnosPorDia()">🖨️ Exportar Turnos por Día a PDF</button>
-  </div>
-
-
-  <section style="display: flex; flex-direction: column; align-items: center; margin-top: 3rem;">
-    <h2>Ingresos al Sistema</h2>
-
-<div class="filtros-fecha">
-  <label>Desde:</label>
-  <input type="date" [(ngModel)]="fechaDesde" (change)="aplicarFiltro()">
-
-  <label>Hasta:</label>
-  <input type="date" [(ngModel)]="fechaHasta" (change)="aplicarFiltro()">
-</div>
-
-
-<div style="max-width: 900px; width: 100%; height: 400px; margin-bottom: 1rem;">
-  <canvas
-    #timelineChart
-    baseChart
-    [type]="'scatter'"
-    [data]="timelineChartData"
-    [options]="timelineChartOptions">
-  </canvas>
-</div>
-
-  </section>
-
-  <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 2rem;">
-    <button (click)="exportToExcelIngresos()">📊 Exportar Ingresos a Excel</button>
-    <button (click)="exportToPDFIngresos()">🖨️ Exportar Ingresos a PDF</button>
-  </div>
-
-  <table style="margin-top: 20px; width: 80%; border-collapse: collapse; font-size: 14px;">
-    <thead>
-      <tr style="background: #f0f0f0;">
-        <th style="padding: 8px; border: 1px solid #ccc;">Usuario</th>
-        <th style="padding: 8px; border: 1px solid #ccc;">Día</th>
-        <th style="padding: 8px; border: 1px solid #ccc;">Horario</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let log of listaLogsIngresos">
-        <td style="padding: 8px; border: 1px solid #ccc;">{{ log.usuario }}</td>
-        <td style="padding: 8px; border: 1px solid #ccc;">{{ log.dia }}</td>
-        <td style="padding: 8px; border: 1px solid #ccc;">{{ log.hora }}</td>
-      </tr>
-    </tbody>
-  </table>
-
-
-<section style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-
-  <h2>Turnos</h2>
-  
-  <div style="display: flex; gap: 20px; width: 100%; max-width: 1200px; flex-wrap: wrap;">
-
-    <div style="flex: 1; min-width: 300px;">
-      <h3 style="text-align: center;">Turnos por Especialidad</h3>
-      <div style="margin-bottom: 1rem;">
-        <canvas
-          baseChart
-          [data]="{
-            labels: pieChartLabels,
-            datasets: [{ data: pieChartData, backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726', '#AB47BC', '#FF7043'] }]
-          }"
-          [type]="'pie'"
-          [options]="pieChartOptions">
-        </canvas>
-      </div>
-      <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 2rem;">
-        <button (click)="exportToExcelTurnosPorEspecialidad()">📊 Exportar a Excel</button>
-        <button (click)="exportToPDFTurnosPorEspecialidad()">🖨️ Exportar a PDF</button>
-      </div>
-    </div>
-
-    <div style="flex: 1; min-width: 300px;">
-      <h3 style="text-align: center;">Turnos por Días</h3>
-      <div style="margin-bottom: 1rem;">
-        <canvas
-          #pieChartDia
-          baseChart
-          [data]="{
-            labels: pieChartTurnosPorDiaLabels,
-            datasets: [{
-              data: pieChartTurnosPorDiaData,
-              backgroundColor: ['#FFA726', '#66BB6A', '#AB47BC', '#42A5F5', '#FF7043', '#26C6DA']
-            }]
-          }"
-          [type]="'pie'"
-          [options]="pieChartTurnosPorDiaOptions">
-        </canvas>
-      </div>
-      <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 2rem;">
-        <button (click)="exportToExcelTurnosPorDia()">📊 Exportar a Excel</button>
-        <button (click)="exportToPDFTurnosPorDia()">🖨️ Exportar a PDF</button>
-      </div>
-    </div>
-
-  </div>
-
-  <section style="display: flex; flex-direction: column; align-items: center; margin-top: 3rem; width: 100%;">
-    <h2>Ingresos al Sistema</h2>
-
-    <div class="filtros-fecha" style="margin-bottom: 1rem;">
-      <label>Desde:</label>
-      <input type="date" [(ngModel)]="fechaDesde" (change)="aplicarFiltro()">
-
-      <label>Hasta:</label>
-      <input type="date" [(ngModel)]="fechaHasta" (change)="aplicarFiltro()">
-    </div>
-
-    <div style="display: flex; gap: 20px; width: 100%; max-width: 1200px; flex-wrap: wrap;">
-      
-      <div style="flex: 1; min-width: 300px; height: 400px;">
-        <canvas
-          #timelineChart
-          baseChart
-          [type]="'scatter'"
-          [data]="timelineChartData"
-          [options]="timelineChartOptions"
-          style="width: 100%; height: 100%;">
-        </canvas>
-      </div>
-
-      <div style="flex: 1; min-width: 300px; max-height: 400px; overflow-y: auto; border: 1px solid #ccc;">
-        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-          <thead>
-            <tr style="background: #f0f0f0; position: sticky; top: 0;">
-              <th style="padding: 8px; border: 1px solid #ccc;">Usuario</th>
-              <th style="padding: 8px; border: 1px solid #ccc;">Día</th>
-              <th style="padding: 8px; border: 1px solid #ccc;">Horario</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let log of listaLogsIngresos">
-              <td style="padding: 8px; border: 1px solid #ccc;">{{ log.usuario }}</td>
-              <td style="padding: 8px; border: 1px solid #ccc;">{{ log.dia }}</td>
-              <td style="padding: 8px; border: 1px solid #ccc;">{{ log.hora }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-    </div>
-
-    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 1rem;">
-      <button (click)="exportToExcelIngresos()">📊 Exportar Ingresos a Excel</button>
-      <button (click)="exportToPDFIngresos()">🖨️ Exportar Ingresos a PDF</button>
-    </div>
-  </section>
-
-</section> -->
 <section style="display: flex; flex-direction: column; align-items: center; width: 100%;">
 
   <!-- ====== TURNOS ====== -->
   <h2>Turnos</h2>
   
   <!-- Contenedor de gráficos de torta -->
-  <div style="display: flex; gap: 20px; width: 100%; max-width: 1200px; flex-wrap: wrap;">
+  <div style="display: flex; gap: 20px; width: 100%; max-width: 1200px; flex-wrap: wrap; background-color: #f3f3f3; padding: 30px; border-radius: 16px; ">
 
     <!-- Gráfico de Turnos por Especialidad -->
     <div style="flex: 1; min-width: 300px;">
@@ -213,7 +20,7 @@
           [options]="pieChartOptions">
         </canvas>
       </div>
-      <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 2rem;">
+      <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 2rem ;">
         <button (click)="exportToExcelTurnosPorEspecialidad()">📊 Exportar a Excel</button>
         <button (click)="exportToPDFTurnosPorEspecialidad()">🖨️ Exportar a PDF</button>
       </div>
@@ -246,7 +53,7 @@
   </div>
 
   <!-- ====== TURNOS POR MÉDICO (BARRAS) ====== -->
-  <div style="width: 100%; max-width: 1200px; margin-top: 2rem;">
+  <div style="width: 100%; max-width: 1200px; margin-top: 2rem; background-color: #f3f3f3;  padding: 30px; border-radius: 16px;">
     <h3 style="text-align: center;">Turnos por Médico (Pendientes vs Realizados)</h3>
         <div style="height: 400px;">
       <canvas
@@ -260,7 +67,8 @@
   </div>
 
   <!-- ====== INGRESOS AL SISTEMA ====== -->
-  <section style="display: flex; flex-direction: column; align-items: center; margin-top: 3rem; width: 100%;">
+  <div style="display: flex; flex-direction: column; align-items: center; margin-top: 3rem; width: 100%; max-width: 1200px; background-color: #f3f3f3; padding: 30px; border-radius: 16px;">
+    
     <h2>Ingresos al Sistema</h2>
 
     <!-- Filtros por fecha -->
@@ -314,6 +122,6 @@
       <button (click)="exportToExcelIngresos()">📊 Exportar Ingresos a Excel</button>
       <button (click)="exportToPDFIngresos()">🖨️ Exportar Ingresos a PDF</button>
     </div>
-  </section>
+  </div>
 
 </section>
