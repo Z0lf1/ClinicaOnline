@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '../../../environments/environment.prod';
 import { createClient } from '@supabase/supabase-js';
 import { Usuario } from '../../models/usuario';
@@ -8,28 +8,43 @@ import { FormsModule } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import {saveAs} from 'file-saver';
 import { CategoriaDirective } from '../../directivas/Categoria.directive';
+import { CaptchaService } from '../../services/captcha.service';
+import { ToggleSwitchDirective } from '../../directivas/toggle-switch.directive';
+import { Subscription } from 'rxjs';
 
 
 const supabase = createClient(environment.apiUrl, environment.publicAnonKey);
 
 @Component({
   selector: 'app-usuarios',
-  imports: [CommonModule,FormsModule,RouterLink,CategoriaDirective],
+  imports: [CommonModule,FormsModule,RouterLink,CategoriaDirective,ToggleSwitchDirective],
   templateUrl: './usuarios.component.html',
   styleUrl: './usuarios.component.scss'
 })
-export class UsuariosComponent implements OnInit{
+export class UsuariosComponent implements OnInit, OnDestroy{
   
-  constructor(private router : Router){}
+  constructor(
+    private router : Router,
+    private captchaService: CaptchaService
+  ){}
 
   ngOnInit() {
     this.getUsersData();
     this.loadEspecialidades();
+    this.getUserData();
+    this.cargarEstadoCaptcha();
+  }
+
+  ngOnDestroy() {
+    this.captchaSubscription?.unsubscribe();
   }
 
   usuarios: Usuario [] = [];
   especialidades: { [id: string]: string } = {};
   turnoRealizadosPaciente: any[] = [];
+  usuario: Usuario | null = null;
+  captchaHabilitado: boolean = true;
+  private captchaSubscription?: Subscription;
 
 
   //trae todos los usuarios a excepcion del logueado
@@ -193,6 +208,44 @@ export class UsuariosComponent implements OnInit{
 
   getAvatarUrl(avatarUrl: string) {
     return supabase.storage.from('fotoUsuarios').getPublicUrl(avatarUrl).data.publicUrl;
+  }
+
+  getUserData(){
+    supabase.auth.getUser().then(({data,error}) => {
+      if(error){
+        console.error('Error:',error.message);
+        return;
+      }        
+      const userId = data.user.id;
+      supabase.from('usuariosclinica').select('*').eq('id',userId).single().then(({data,error}) => {
+        if(error){
+          console.error('Error al obtener usuario:', error.message);
+          return;
+        }  
+        this.usuario = data; 
+      })
+    });
+  }
+
+  esAdmin(): boolean {
+    return this.usuario?.categoria === 'administrador';
+  }
+
+  cargarEstadoCaptcha() {
+    this.captchaSubscription = this.captchaService.captchaHabilitado$.subscribe(
+      habilitado => {
+        this.captchaHabilitado = habilitado;
+      }
+    );
+  }
+
+  async onToggleChange(nuevoEstado: boolean) {
+    const resultado = await this.captchaService.actualizarEstadoCaptcha(nuevoEstado);
+    if (!resultado.exito) {
+      // Si falla, revertir el estado
+      this.captchaHabilitado = !nuevoEstado;
+      alert(resultado.mensaje || 'Error al actualizar la configuración del captcha');
+    }
   }
 
 }

@@ -17,7 +17,12 @@ const supabase = createClient(environment.apiUrl, environment.publicAnonKey);
   templateUrl: './cargar-historia-clinica.component.html',
   styleUrl: './cargar-historia-clinica.component.scss'
 })
+
 export class CargarHistoriaClinicaComponent implements OnInit {
+
+  dolor: number = 0;
+  dias_reposo: number = 0;
+  primera_consulta: boolean = false;
 
   turno: Turno | null = null;
   historiaClinica: HistoriaClinica = {
@@ -31,6 +36,7 @@ export class CargarHistoriaClinicaComponent implements OnInit {
     presion: '',
     datos_dinamicos: {},
     created_at: ''
+
   }
 
   datosDinamicosTemp: { clave: string; valor: string }[] = [];
@@ -78,6 +84,10 @@ export class CargarHistoriaClinicaComponent implements OnInit {
     }
 
     const datosDinamicos: Record<string, string> = {};
+    datosDinamicos['dolor'] = this.dolor.toString();
+    datosDinamicos['dias_reposo'] = this.dias_reposo.toString();
+    datosDinamicos['primera_consulta'] = this.primera_consulta ? 'Sí' : 'No';
+
     this.datosDinamicosTemp.forEach((dato) => {
       if (dato.clave && dato.valor) {
         datosDinamicos[dato.clave] = dato.valor;

@@ -1,12 +1,10 @@
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment.prod';
 import { createClient } from '@supabase/supabase-js';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Form } from '@angular/forms';
-import { CaptchaService } from '../../services/captcha.service';
-import { Subscription } from 'rxjs';
 
 
 const supabase = createClient(environment.apiUrl, environment.publicAnonKey);
@@ -18,7 +16,7 @@ const supabase = createClient(environment.apiUrl, environment.publicAnonKey);
   templateUrl: './disponibilidad.component.html',
   styleUrl: './disponibilidad.component.scss'
 })
-export class DisponibilidadComponent implements OnInit, AfterViewInit, OnDestroy {
+export class DisponibilidadComponent implements OnInit {
 
   usuarioId: string = '';
   diasDeSemana = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes','Sabado'];
@@ -29,28 +27,10 @@ export class DisponibilidadComponent implements OnInit, AfterViewInit, OnDestroy
   mensajeError: string = '';
   duracionTurno: number = 30; // Duración fija de los turnos en minutos
 
-  captchaCompletado: boolean = false;
-  captchaHabilitado: boolean = true;
-  private captchaSubscription?: Subscription;
-
-  constructor(
-    private router: Router,
-    private captchaService: CaptchaService
-  ) {}
+  constructor(private router: Router) {}
 
   ngOnInit() {
     this.generarHorarios();
-    
-    this.captchaSubscription = this.captchaService.captchaHabilitado$.subscribe(
-      habilitado => {
-        this.captchaHabilitado = habilitado;
-        if (!habilitado) {
-          this.captchaCompletado = true; // Si está deshabilitado, considerar como completado
-        } else {
-          this.captchaCompletado = false; // Si se habilita, resetear
-        }
-      }
-    );
     
     supabase.auth.getUser().then(({ data, error }) => {
       if (error || !data.user) return;
@@ -77,58 +57,8 @@ export class DisponibilidadComponent implements OnInit, AfterViewInit, OnDestroy
 
   }
 
-  ngOnDestroy() {
-    this.captchaSubscription?.unsubscribe();
-  }
-
-  ngAfterViewInit() {
-    if (this.captchaHabilitado) {
-      this.renderizarCaptcha();
-    }
-  }
-
-  renderizarCaptcha() {
-    if (!this.captchaHabilitado) {
-      return;
-    }
-
-    const checkInterval = setInterval(() => {
-      const captchaDiv = document.getElementById('captcha-disponibilidad');
-      
-      if (captchaDiv && (window as any).grecaptcha) {
-        if (!captchaDiv.hasChildNodes()) {
-          try {
-            (window as any).grecaptcha.render('captcha-disponibilidad', {
-              'sitekey': '6Le9HA4sAAAAABU7Wg6hc1Vlznz-vuPxySrg-CLB',
-              'callback': () => this.onCaptchaResolved()
-            });
-          } catch (e) {
-            console.error('Error renderizando captcha:', e);
-          }
-        }
-        if (captchaDiv.hasChildNodes() && captchaDiv.offsetParent !== null) {
-          clearInterval(checkInterval);
-        }
-      }
-    }, 500);
-    
-    setTimeout(() => clearInterval(checkInterval), 10000);
-  }
-
-  onCaptchaResolved() {
-    this.captchaCompletado = true;
-  }
-
   guardarDisponibilidad() {
-    this.mensajeError = '';
-
-    if (this.captchaHabilitado) {
-      const token = (window as any).grecaptcha?.getResponse();
-      if (!token) {
-        this.mensajeError = 'Por favor completá el captcha.';
-        return;
-      }
-    } 
+    this.mensajeError = ''; 
 
     for (const d of this.disponibilidadEditable) {
       if ((d.hora_inicio && !d.hora_fin) || (!d.hora_inicio && d.hora_fin)) {

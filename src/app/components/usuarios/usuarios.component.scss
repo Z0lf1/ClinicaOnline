@@ -2,7 +2,7 @@
   max-width: 1000px;
   margin: 0 auto 40px auto;
   padding: 30px 40px;
-  background-color: #f3f3f3;
+  background-color: rgba(255, 255, 255, 0.9);
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   font-family: 'Segoe UI', sans-serif;
@@ -25,7 +25,7 @@
       right: 0; 
       top: 50%; 
       transform: translateY(-50%); 
-      background-color: #3F13B0;
+      background-color: #3498db;
       color: white;
       border: none;
       padding: 8px 16px;
@@ -36,6 +36,59 @@
 
       &:hover {
         background-color: #2980b9;
+      }
+    }
+  }
+
+  .configuracion-captcha {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    text-align: center;
+
+    .toggle-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 16px;
+      color: #333;
+
+      .toggle-checkbox {
+        display: none;
+      }
+
+      .toggle-switch {
+        position: relative;
+        width: 50px;
+        height: 26px;
+        background-color: #ccc;
+        border-radius: 13px;
+        transition: background-color 0.3s;
+
+        &::after {
+          content: '';
+          position: absolute;
+          width: 22px;
+          height: 22px;
+          border-radius: 50%;
+          background-color: white;
+          top: 2px;
+          left: 2px;
+          transition: transform 0.3s;
+        }
+      }
+
+      .toggle-checkbox:checked + .toggle-switch {
+        background-color: #00ffff;
+
+        &::after {
+          transform: translateX(24px);
+        }
       }
     }
   }
@@ -118,7 +171,7 @@
     min-width: 150px;
 
     button {
-      background-color: #3F13B0;
+      background-color: #3498db;
       color: white;
       border: none;
       padding: 8px 14px;

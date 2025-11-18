@@ -1,20 +1,14 @@
 <div *ngIf="cuentaHabilitada()">
   <nav class="navbar">
     <div class="navbar-container">
-      
-      
-      <span class="logo" (click)="irAlHome()" style="cursor: pointer;">
-        Clínica Online
-      </span>
-
-      
+      <span class="logo">Clínica Online</span>
       <ul class="nav-links">
         <li *ngIf="esAdmin()"><a [routerLink]="['solicitar-turno']">Cargar Turno</a></li>
         <li *ngIf="esAdmin()"><a [routerLink]="['turnos']">Turnos</a></li>
         <li *ngIf="esAdmin()"><a [routerLink]="['generar-usuario']">Generar Usuario</a></li>
         <li *ngIf="esAdmin()"><a [routerLink]="['usuarios']">Gestión De Usuarios</a></li>
         <li *ngIf="esAdmin()"><a [routerLink]="['especialidades']">Gestion De Especialidades</a></li>
-        <li *ngIf="esAdmin()"><a [routerLink]="['informes']">Informes</a></li>
+        <li *ngIf="esAdmin()"><a [routerLink]="['informes']">informes</a></li>
         <li *ngIf="esEspecialista()"><a [routerLink]="['mis-turnos']">Mis Turnos</a></li>
         <li *ngIf="esEspecialista()"><a [routerLink]="['pacientes']">Pacientes</a></li>
         <li *ngIf="esPaciente()"><a [routerLink]="['solicitar-turno']">Solicitar Turno</a></li>
@@ -30,14 +24,6 @@
       <h2>Bienvenido{{ usuario?.nombre && usuario?.apellido ? ', ' + usuario?.nombre + ' ' + usuario?.apellido : '' }}!</h2>
       <p>Estás logueado como: <strong>{{ usuario?.categoria }}</strong></p>
       <p>Usá el menú superior para navegar por la aplicación.</p>
-      
-      <div *ngIf="esAdmin()" class="configuracion-captcha">
-        <div appToggleSwitch 
-             [label]="'Captcha habilitado:'" 
-             [ngModel]="captchaHabilitado" 
-             (ngModelChange)="onToggleChange($event)">
-        </div>
-      </div>
     </div>
   </div>
 

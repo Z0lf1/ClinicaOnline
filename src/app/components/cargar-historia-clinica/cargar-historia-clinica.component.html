@@ -24,6 +24,33 @@
       <input type="text" name="presion" [(ngModel)]="historiaClinica.presion" required>
     </div>
 
+    <div class="datos-extra">
+  <h3>Datos adicionales obligatorios</h3>
+
+  <!-- Control de rango 0–100 -->
+  <div class="campo">
+    <label>Grado de dolor (0 a 100%)</label>
+    <input type="range" min="0" max="100" [(ngModel)]="dolor" name="dolor">
+    <span>{{ dolor }}%</span>
+  </div>
+
+  <!-- Campo numérico -->
+  <div class="campo">
+    <label>Días con reposo</label>
+    <input type="number" min="0" [(ngModel)]="dias_reposo" name="dias_reposo">
+  </div>
+
+  <!-- Switch Sí / No -->
+  <div class="campo">
+    <label>Primera consulta</label>
+    <label class="switch">
+      <input type="checkbox" [(ngModel)]="primera_consulta" name="primera_consulta">
+      <span class="slider"></span>
+    </label>
+    <span>{{ primera_consulta ? 'Sí' : 'No' }}</span>
+  </div>
+</div>
+
     <!-- Datos dinámicos -->
     <div class="datos-dinamicos">
       <h3>Datos adicionales (máximo 3)</h3>

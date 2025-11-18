@@ -50,6 +50,14 @@
     <button (click)="descargarExcelUsuarios()">Descargar Usuarios</button>
   </div>
 
+  <div *ngIf="esAdmin()" class="configuracion-captcha">
+    <div appToggleSwitch 
+         [label]="'Captcha habilitado:'" 
+         [ngModel]="captchaHabilitado" 
+         (ngModelChange)="onToggleChange($event)">
+    </div>
+  </div>
+
   <div *ngIf="usuarios.length > 0" class="cards-list">
 
     <div *ngFor="let usuario of usuarios; let i = index">

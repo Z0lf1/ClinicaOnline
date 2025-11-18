@@ -8,9 +8,7 @@
       <option *ngFor="let esp of especialidadesDisponibles" [value]="esp.nombre"></option>
     </datalist>
 
-    <div *ngIf="captchaHabilitado" id="captcha-especialidad" class="g-recaptcha" data-sitekey="6Le9HA4sAAAAABU7Wg6hc1Vlznz-vuPxySrg-CLB"></div>
-
-    <button type="button" (click)="agregarEspecialidad()" [disabled]="captchaHabilitado && !captchaCompletado">Agregar</button>
+    <button type="button" (click)="agregarEspecialidad()">Agregar</button>
     <div class="form-succes" *ngIf="msg">{{ msg }}</div>
     <div class="form-error" *ngIf="errorMsg">{{ errorMsg }}</div>
   </div>
