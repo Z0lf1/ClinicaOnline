@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, OnDestroy } from '@angular/core';
 import { Router,RouterModule } from '@angular/router';
 import { createClient } from '@supabase/supabase-js';
 // Usar el env de desarrollo durante el serve local. Si quieres apuntar al proyecto de producción,
@@ -8,6 +8,8 @@ import { Usuario } from '../../models/usuario';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { trigger, transition, style, animate, query, animateChild, group, state, keyframes } from '@angular/animations';
+import { CaptchaService } from '../../services/captcha.service';
+import { Subscription } from 'rxjs';
 
 const supabase = createClient(environment.apiUrl, environment.publicAnonKey);
 
@@ -59,7 +61,7 @@ const supabase = createClient(environment.apiUrl, environment.publicAnonKey);
   
   ]
 })
-export class RegisterComponent implements OnInit, AfterViewInit{
+export class RegisterComponent implements OnInit, AfterViewInit, OnDestroy{
 
   usuario: Usuario = {
       nombre: '',
@@ -91,14 +93,29 @@ export class RegisterComponent implements OnInit, AfterViewInit{
   tipoSeleccionado: boolean = false;
   animacionTipo: 'visible' | 'izquierda' | 'derecha' = 'visible';
   
+  captchaHabilitado: boolean = true;
+  private captchaSubscription?: Subscription;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private captchaService: CaptchaService
+  ) {}
 
   ngOnInit(): void {
     this.loadEspecialidades();    
+    this.captchaSubscription = this.captchaService.captchaHabilitado$.subscribe(
+      habilitado => {
+        this.captchaHabilitado = habilitado;
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    this.captchaSubscription?.unsubscribe();
   }
 
   ngAfterViewInit() {
+    if (this.captchaHabilitado) {
     const checkInterval = setInterval(() => {
       const captchaDiv = document.getElementById('captcha');
       if (captchaDiv && (window as any).grecaptcha) {
@@ -108,16 +125,19 @@ export class RegisterComponent implements OnInit, AfterViewInit{
         clearInterval(checkInterval);
       }
     }, 500);
+    }
   }
 
   registrar() {
     this.submitted = true;
     this.errorMsg = '';
 
-    const token = (window as any).grecaptcha.getResponse();
+    if (this.captchaHabilitado) {
+      const token = (window as any).grecaptcha?.getResponse();
     if (!token) {
       this.errorMsg = 'Por favor completá el captcha.';
       return;
+      }
     }
 
 
