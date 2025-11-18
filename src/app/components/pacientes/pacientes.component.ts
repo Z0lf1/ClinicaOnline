@@ -103,7 +103,7 @@ export class PacientesComponent implements OnInit{
     }
 
     supabase
-      .from('historias-clinicas')
+      .from('historias_clinicas')
       .select('*')
       .in('turno_id', turnosIds)
       .then(({data,error}) => {

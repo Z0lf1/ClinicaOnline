@@ -131,7 +131,7 @@ export class PerfilComponent implements OnInit{
     if (!this.usuario || this.usuario.categoria !== 'paciente') return;
 
     supabase
-      .from('historias-clinicas')
+      .from('historias_clinicas')
       .select(`
         turno:turno_id (
           especialista:especialista_id ( id, nombre, apellido )
@@ -241,7 +241,7 @@ export class PerfilComponent implements OnInit{
   if (!this.usuario || this.usuario.categoria !== 'paciente') return;
 
   supabase
-    .from('historias-clinicas')
+    .from('historias_clinicas')
     .select(`
       *, 
       turno:turno_id (

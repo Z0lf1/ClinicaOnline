@@ -103,7 +103,7 @@ export class MisTurnosComponent implements OnInit {
         const turnosIds = turnosSinHistoria.map(t => t.id);
 
         supabase
-          .from('historias-clinicas')
+          .from('historias_clinicas')
           .select('*')
           .in('turno_id',turnosIds)
           .then(({ data, error }) => {
@@ -112,21 +112,36 @@ export class MisTurnosComponent implements OnInit {
               this.turnos = turnosSinHistoria;
             }
 
-            this.turnos = turnosSinHistoria.map(t => {
-              const historia = data?.find(h => h.turno_id === t.id);
-              return {
-                ...t,
-                historiaClinica: historia?{
-                  altura: historia.altura,
-                  peso: historia.peso,
-                  temperatura: historia.temperatura,
-                  presion: historia.presion,
-                  datos_dinamicos: historia.datos_dinamicos || {}
-                } : null
-              
-                
-              };
-            });
+this.turnos = turnosSinHistoria.map(t => {
+  const historia = data?.find(h => h.turno_id === t.id);
+
+  let datosDinamicos = {};
+
+  if (historia) {
+    try {
+      datosDinamicos = typeof historia.datos_dinamicos === 'string'
+        ? JSON.parse(historia.datos_dinamicos)
+        : historia.datos_dinamicos || {};
+    } catch {
+      datosDinamicos = {};
+    }
+
+    // 🔥 LOG PARA VER QUÉ VIENE EN CADA TURNO
+    console.log("DATOS DINÁMICOS DEL TURNO", t.id, datosDinamicos);
+  }
+
+  return {
+    ...t,
+    historiaClinica: historia ? {
+      altura: historia.altura,
+      peso: historia.peso,
+      temperatura: historia.temperatura,
+      presion: historia.presion,
+      datos_dinamicos: datosDinamicos
+    } : null
+  };
+});
+
           });
       });
   }
